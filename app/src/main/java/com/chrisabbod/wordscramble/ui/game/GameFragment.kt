@@ -44,6 +44,8 @@ class GameFragment : Fragment() {
     private fun onSubmitWord() {
         currentScrambledWord = getNextScrambledWord()
         currentWordCount++
+        score += SCORE_INCREASE
+        binding.tvScore.text = getString(R.string.score, score)
         binding.tvWordCount.text = getString(
             R.string.word_count,
             currentWordCount,
