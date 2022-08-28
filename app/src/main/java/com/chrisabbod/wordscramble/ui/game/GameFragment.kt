@@ -20,7 +20,6 @@ class GameFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         binding = FragmentGameBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -52,7 +51,7 @@ class GameFragment : Fragment() {
             currentWordCount,
             MAX_NO_OF_WORDS
         )
-        //TODO: create function to set error text field
+        setErrorTextField(false)
         updateNextWordOnScreen()
     }
 
@@ -64,6 +63,7 @@ class GameFragment : Fragment() {
             currentWordCount,
             MAX_NO_OF_WORDS
         )
+        setErrorTextField(false)
         updateNextWordOnScreen()
     }
 
@@ -76,5 +76,15 @@ class GameFragment : Fragment() {
 
     private fun updateNextWordOnScreen() {
         binding.tvUnscrambledWord.text = currentScrambledWord
+    }
+
+    private fun setErrorTextField(error: Boolean) {
+        if (error) {
+            binding.textField.isErrorEnabled = true
+            binding.textField.error = getString(R.string.try_again)
+        } else {
+            binding.textField.isErrorEnabled = false
+            binding.etInput.text = null
+        }
     }
 }
