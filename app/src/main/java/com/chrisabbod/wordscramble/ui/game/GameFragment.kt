@@ -32,6 +32,7 @@ class GameFragment : Fragment() {
 
         binding.apply {
             btnSubmit.setOnClickListener { onSubmitWord() }
+            btnSkip.setOnClickListener { onSkipWord() }
             tvWordCount.text = getString(
                 R.string.word_count, 0, MAX_NO_OF_WORDS
             )
@@ -52,6 +53,17 @@ class GameFragment : Fragment() {
             MAX_NO_OF_WORDS
         )
         //TODO: create function to set error text field
+        updateNextWordOnScreen()
+    }
+
+    private fun onSkipWord() {
+        currentScrambledWord = getNextScrambledWord()
+        currentWordCount++
+        binding.tvWordCount.text = getString(
+            R.string.word_count,
+            currentWordCount,
+            MAX_NO_OF_WORDS
+        )
         updateNextWordOnScreen()
     }
 
