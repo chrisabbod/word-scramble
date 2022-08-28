@@ -13,6 +13,7 @@ class GameFragment : Fragment() {
     private lateinit var binding: FragmentGameBinding
 
     private var score = 0
+    private var currentScrambledWord = "test"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,6 +27,8 @@ class GameFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        updateNextWordOnScreen()
+
         binding.apply {
             tvWordCount.text = getString(
                 R.string.word_count, 0, MAX_NO_OF_WORDS)
@@ -34,4 +37,7 @@ class GameFragment : Fragment() {
         }
     }
 
+    private fun updateNextWordOnScreen() {
+        binding.tvUnscrambledWord.text = currentScrambledWord
+    }
 }
