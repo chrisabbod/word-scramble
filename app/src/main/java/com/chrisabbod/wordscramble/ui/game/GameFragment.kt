@@ -5,12 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import com.chrisabbod.wordscramble.R
 import com.chrisabbod.wordscramble.databinding.FragmentGameBinding
 
 class GameFragment : Fragment() {
 
     private lateinit var binding: FragmentGameBinding
+    private val viewModel: GameViewModel by viewModels()
 
     private var score = 0
     private var currentScrambledWord = "test"
