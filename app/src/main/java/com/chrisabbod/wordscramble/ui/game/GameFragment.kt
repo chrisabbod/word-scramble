@@ -98,10 +98,10 @@ class GameFragment : Fragment() {
             .setMessage(getString(R.string.you_scored, viewModel.score))
             .setCancelable(false)
             .setNegativeButton(getString(R.string.exit)) { _, _ ->
-                //exitGame()
+                exitGame()
             }
             .setPositiveButton(getString(R.string.play_again)) { _, _ ->
-                //restartGame()
+                restartGame()
             }
             .show()
     }
@@ -111,8 +111,9 @@ class GameFragment : Fragment() {
      * with the new data, to restart the game.
      */
     private fun restartGame() {
-//        viewModel.reinitializeData()
+        viewModel.reinitializeData()
         setErrorTextField(false)
+        updateNextWordOnScreen()
     }
 
     private fun exitGame() {
