@@ -14,10 +14,6 @@ class GameFragment : Fragment() {
     private lateinit var binding: FragmentGameBinding
     private val viewModel: GameViewModel by viewModels()
 
-    private var score = 0
-    private var currentScrambledWord = "test"
-    private var currentWordCount = 0
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,19 +34,19 @@ class GameFragment : Fragment() {
                 R.string.word_count, 0, MAX_NO_OF_WORDS
             )
             tvScore.text = getString(
-                R.string.score, score
+                R.string.score, viewModel.score
             )
         }
     }
 
     private fun onSubmitWord() {
-        currentScrambledWord = getNextScrambledWord()
-        currentWordCount++
-        score += SCORE_INCREASE
-        binding.tvScore.text = getString(R.string.score, score)
+//        currentScrambledWord = getNextScrambledWord()
+//        currentWordCount++
+//        score += SCORE_INCREASE
+        binding.tvScore.text = getString(R.string.score, viewModel.score)
         binding.tvWordCount.text = getString(
             R.string.word_count,
-            currentWordCount,
+            viewModel.currentWordCount,
             MAX_NO_OF_WORDS
         )
         setErrorTextField(false)
@@ -58,11 +54,11 @@ class GameFragment : Fragment() {
     }
 
     private fun onSkipWord() {
-        currentScrambledWord = getNextScrambledWord()
-        currentWordCount++
+//        currentScrambledWord = getNextScrambledWord()
+//        currentWordCount++
         binding.tvWordCount.text = getString(
             R.string.word_count,
-            currentWordCount,
+            viewModel.currentWordCount,
             MAX_NO_OF_WORDS
         )
         setErrorTextField(false)
@@ -77,7 +73,7 @@ class GameFragment : Fragment() {
     }
 
     private fun updateNextWordOnScreen() {
-        binding.tvUnscrambledWord.text = currentScrambledWord
+        binding.tvUnscrambledWord.text = viewModel.currentScrambledWord
     }
 
     private fun setErrorTextField(error: Boolean) {
