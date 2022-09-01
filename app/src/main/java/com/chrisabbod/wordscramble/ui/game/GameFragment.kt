@@ -42,10 +42,17 @@ class GameFragment : Fragment() {
     }
 
     private fun onSubmitWord() {
-        if (viewModel.nextWord()) {
-            updateNextWordOnScreen()
+        val playerWord = binding.etInput.text.toString()
+
+        if (viewModel.isUserWordCorrect(playerWord)) {
+            setErrorTextField(false)
+            if (viewModel.nextWord()) {
+                updateNextWordOnScreen()
+            } else {
+                showFinalScoreDialog()
+            }
         } else {
-            showFinalScoreDialog()
+            setErrorTextField(true)
         }
     }
 
@@ -106,9 +113,6 @@ class GameFragment : Fragment() {
         setErrorTextField(false)
     }
 
-    /*
-     * Exits the game.
-     */
     private fun exitGame() {
         activity?.finish()
     }
