@@ -57,15 +57,14 @@ class GameFragment : Fragment() {
     }
 
     private fun onSkipWord() {
-//        currentScrambledWord = getNextScrambledWord()
-//        currentWordCount++
-        binding.tvWordCount.text = getString(
-            R.string.word_count,
-            viewModel.currentWordCount,
-            MAX_NO_OF_WORDS
-        )
-        setErrorTextField(false)
-        updateNextWordOnScreen()
+        if (viewModel.nextWord()) {
+            if (viewModel.nextWord()) {
+                setErrorTextField(false)
+                updateNextWordOnScreen()
+            } else {
+                showFinalScoreDialog()
+            }
+        }
     }
 
     private fun getNextScrambledWord(): String {
