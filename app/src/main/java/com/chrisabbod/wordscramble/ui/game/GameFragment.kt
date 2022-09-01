@@ -1,25 +1,30 @@
 package com.chrisabbod.wordscramble.ui.game
 
+import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import com.chrisabbod.wordscramble.R
 import com.chrisabbod.wordscramble.databinding.FragmentGameBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class GameFragment : Fragment() {
 
     private lateinit var binding: FragmentGameBinding
-
-    private var score = 0
-    private var currentScrambledWord = "test"
-    private var currentWordCount = 0
+    private val viewModel: GameViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        Log.d("GameFragment", "Word: ${viewModel.currentScrambledWord} " +
+                "Score: ${viewModel.score} WordCount: ${viewModel.currentWordCount}")
+
         binding = FragmentGameBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -36,35 +41,33 @@ class GameFragment : Fragment() {
                 R.string.word_count, 0, MAX_NO_OF_WORDS
             )
             tvScore.text = getString(
-                R.string.score, score
+                R.string.score, viewModel.score
             )
         }
     }
 
     private fun onSubmitWord() {
-        currentScrambledWord = getNextScrambledWord()
-        currentWordCount++
-        score += SCORE_INCREASE
-        binding.tvScore.text = getString(R.string.score, score)
-        binding.tvWordCount.text = getString(
-            R.string.word_count,
-            currentWordCount,
-            MAX_NO_OF_WORDS
-        )
-        setErrorTextField(false)
-        updateNextWordOnScreen()
+        val playerWord = binding.etInput.text.toString()
+
+        if (viewModel.isUserWordCorrect(playerWord)) {
+            setErrorTextField(false)
+            if (viewModel.nextWord()) {
+                updateNextWordOnScreen()
+            } else {
+                showFinalScoreDialog()
+            }
+        } else {
+            setErrorTextField(true)
+        }
     }
 
     private fun onSkipWord() {
-        currentScrambledWord = getNextScrambledWord()
-        currentWordCount++
-        binding.tvWordCount.text = getString(
-            R.string.word_count,
-            currentWordCount,
-            MAX_NO_OF_WORDS
-        )
-        setErrorTextField(false)
-        updateNextWordOnScreen()
+        if (viewModel.nextWord()) {
+            setErrorTextField(false)
+            updateNextWordOnScreen()
+        } else {
+            showFinalScoreDialog()
+        }
     }
 
     private fun getNextScrambledWord(): String {
@@ -75,7 +78,7 @@ class GameFragment : Fragment() {
     }
 
     private fun updateNextWordOnScreen() {
-        binding.tvUnscrambledWord.text = currentScrambledWord
+        binding.tvUnscrambledWord.text = viewModel.currentScrambledWord
     }
 
     private fun setErrorTextField(error: Boolean) {
@@ -86,5 +89,34 @@ class GameFragment : Fragment() {
             binding.textField.isErrorEnabled = false
             binding.etInput.text = null
         }
+    }
+
+    //AlertDialog is placed in the Fragment because it is UI related
+    private fun showFinalScoreDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.congratulations))
+            .setMessage(getString(R.string.you_scored, viewModel.score))
+            .setCancelable(false)
+            .setNegativeButton(getString(R.string.exit)) { _, _ ->
+                exitGame()
+            }
+            .setPositiveButton(getString(R.string.play_again)) { _, _ ->
+                restartGame()
+            }
+            .show()
+    }
+
+    /*
+     * Re-initializes the data in the ViewModel and updates the views
+     * with the new data, to restart the game.
+     */
+    private fun restartGame() {
+        viewModel.reinitializeData()
+        setErrorTextField(false)
+        updateNextWordOnScreen()
+    }
+
+    private fun exitGame() {
+        activity?.finish()
     }
 }
