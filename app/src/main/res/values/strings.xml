@@ -7,4 +7,9 @@
     <string name="word_count">%d of %d words</string>
     <string name="score">Score: %d</string>
     <string name="try_again">Try again!</string>
+    <string name="congratulations">Congratulations!</string>
+    <string name="you_scored">"You scored: %d"</string>
+    <string name="exit">Exit</string>
+    <string name="play_again">Play Again</string>
+    <string name="try_again">Try again!</string>
 </resources>

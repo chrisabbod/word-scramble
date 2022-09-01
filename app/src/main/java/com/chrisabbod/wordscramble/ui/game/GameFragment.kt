@@ -1,5 +1,6 @@
 package com.chrisabbod.wordscramble.ui.game
 
+import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.chrisabbod.wordscramble.R
 import com.chrisabbod.wordscramble.databinding.FragmentGameBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class GameFragment : Fragment() {
 
@@ -84,5 +86,20 @@ class GameFragment : Fragment() {
             binding.textField.isErrorEnabled = false
             binding.etInput.text = null
         }
+    }
+
+    //AlertDialog is placed in the Fragment because it is UI related
+    private fun showFinalScoreDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.congratulations))
+            .setMessage(getString(R.string.you_scored, viewModel.score))
+            .setCancelable(false)
+            .setNegativeButton(getString(R.string.exit)) { _, _ ->
+                //exitGame()
+            }
+            .setPositiveButton(getString(R.string.play_again)) { _, _ ->
+                //restartGame()
+            }
+            .show()
     }
 }
