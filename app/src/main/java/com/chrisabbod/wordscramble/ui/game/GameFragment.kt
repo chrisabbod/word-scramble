@@ -2,6 +2,7 @@ package com.chrisabbod.wordscramble.ui.game
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,10 @@ class GameFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        Log.d("GameFragment", "Word: ${viewModel.currentScrambledWord} " +
+                "Score: ${viewModel.score} WordCount: ${viewModel.currentWordCount}")
+
         binding = FragmentGameBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -58,12 +63,10 @@ class GameFragment : Fragment() {
 
     private fun onSkipWord() {
         if (viewModel.nextWord()) {
-            if (viewModel.nextWord()) {
-                setErrorTextField(false)
-                updateNextWordOnScreen()
-            } else {
-                showFinalScoreDialog()
-            }
+            setErrorTextField(false)
+            updateNextWordOnScreen()
+        } else {
+            showFinalScoreDialog()
         }
     }
 
