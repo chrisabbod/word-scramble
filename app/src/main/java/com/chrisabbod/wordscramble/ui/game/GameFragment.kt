@@ -42,17 +42,11 @@ class GameFragment : Fragment() {
     }
 
     private fun onSubmitWord() {
-//        currentScrambledWord = getNextScrambledWord()
-//        currentWordCount++
-//        score += SCORE_INCREASE
-        binding.tvScore.text = getString(R.string.score, viewModel.score)
-        binding.tvWordCount.text = getString(
-            R.string.word_count,
-            viewModel.currentWordCount,
-            MAX_NO_OF_WORDS
-        )
-        setErrorTextField(false)
-        updateNextWordOnScreen()
+        if (viewModel.nextWord()) {
+            updateNextWordOnScreen()
+        } else {
+            showFinalScoreDialog()
+        }
     }
 
     private fun onSkipWord() {
@@ -101,5 +95,21 @@ class GameFragment : Fragment() {
                 //restartGame()
             }
             .show()
+    }
+
+    /*
+     * Re-initializes the data in the ViewModel and updates the views
+     * with the new data, to restart the game.
+     */
+    private fun restartGame() {
+//        viewModel.reinitializeData()
+        setErrorTextField(false)
+    }
+
+    /*
+     * Exits the game.
+     */
+    private fun exitGame() {
+        activity?.finish()
     }
 }

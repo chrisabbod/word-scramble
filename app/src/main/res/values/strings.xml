@@ -11,5 +11,4 @@
     <string name="you_scored">"You scored: %d"</string>
     <string name="exit">Exit</string>
     <string name="play_again">Play Again</string>
-    <string name="try_again">Try again!</string>
 </resources>
