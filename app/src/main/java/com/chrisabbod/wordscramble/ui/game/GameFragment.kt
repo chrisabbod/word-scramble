@@ -21,8 +21,15 @@ class GameFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        Log.d("GameFragment", "Word: ${viewModel.currentScrambledWord} " +
-                "Score: ${viewModel.score} WordCount: ${viewModel.currentWordCount}")
+        Log.d(
+            "GameFragment", "Word: ${viewModel.currentScrambledWord} " +
+                    "Score: ${viewModel.score} WordCount: ${viewModel.currentWordCount}"
+        )
+
+        //Observe the currentScrambledWord LiveData.
+        viewModel.currentScrambledWord.observe(viewLifecycleOwner) { newWord ->
+            binding.tvUnscrambledWord.text = newWord
+        }
 
         binding = FragmentGameBinding.inflate(inflater, container, false)
         return binding.root
@@ -31,7 +38,6 @@ class GameFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        updateNextWordOnScreen()
 
         binding.apply {
             btnSubmit.setOnClickListener { onSubmitWord() }
@@ -50,9 +56,7 @@ class GameFragment : Fragment() {
 
         if (viewModel.isUserWordCorrect(playerWord)) {
             setErrorTextField(false)
-            if (viewModel.nextWord()) {
-                updateNextWordOnScreen()
-            } else {
+            if (!viewModel.nextWord()) {
                 showFinalScoreDialog()
             }
         } else {
@@ -63,14 +67,9 @@ class GameFragment : Fragment() {
     private fun onSkipWord() {
         if (viewModel.nextWord()) {
             setErrorTextField(false)
-            updateNextWordOnScreen()
         } else {
             showFinalScoreDialog()
         }
-    }
-
-    private fun updateNextWordOnScreen() {
-        binding.tvUnscrambledWord.text = viewModel.currentScrambledWord
     }
 
     private fun setErrorTextField(error: Boolean) {
@@ -105,7 +104,6 @@ class GameFragment : Fragment() {
     private fun restartGame() {
         viewModel.reinitializeData()
         setErrorTextField(false)
-        updateNextWordOnScreen()
     }
 
     private fun exitGame() {
