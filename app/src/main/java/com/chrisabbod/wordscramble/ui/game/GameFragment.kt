@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.chrisabbod.wordscramble.R
 import com.chrisabbod.wordscramble.databinding.FragmentGameBinding
@@ -20,23 +21,25 @@ class GameFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        Log.d(
-            "GameFragment", "Word: ${viewModel.currentScrambledWord} " +
-                    "Score: ${viewModel.score} WordCount: ${viewModel.currentWordCount}"
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_game,
+            container,
+            false
         )
-
-        binding = FragmentGameBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //Observe currentScrambledWord LiveData
-        viewModel.currentScrambledWord.observe(viewLifecycleOwner) { newWord ->
-            binding.tvUnscrambledWord.text = newWord
-        }
+        binding.gameViewModel = viewModel
+        binding.maxNoOfWords = MAX_NO_OF_WORDS
+
+        // Specify the fragment view as the lifecycle owner of the binding.
+        // This is used so that the binding can observe LiveData updates
+        binding.lifecycleOwner = viewLifecycleOwner
+        
         //Observe score LiveData
         viewModel.score.observe(viewLifecycleOwner) { newScore ->
             binding.tvScore.text = getString(R.string.score, newScore)
